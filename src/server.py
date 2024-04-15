@@ -13,21 +13,12 @@ if __name__ == "__main__":
     PORT = int(env_port) if env_port else 8080
     HOST = os.getenv('HOST') or 'localhost'
 
-    server = Server(HOST, PORT)
+    server = Server(script_directory.parent, HOST, PORT)
     app = server.app
 
     # Add application-specific routes
-    @app.route('/')
-    def index():
-        return send_file(script_directory.parent / 'index.html')
-
     @app.route('/src/<path:path>')
     def get_static_assets(path):
         return send_from_directory(script_directory.parent / 'src', path)
-    
-
-    @app.route('/view/<path:path>')
-    def view(path):
-        return send_file(script_directory.parent / 'index.html')
     
     server.run()
