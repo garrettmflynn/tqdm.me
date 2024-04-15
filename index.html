@@ -2,27 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
     <link rel="stylesheet" href="/src/frontend/styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Commoners Starter Kit</title>
-    <script type="module" src="/src/frontend/main.ts" defer></script>
-    <script src="https://unpkg.com/swagger-client"></script>
+    <title>tqdm.me</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script type="module" src="/src/frontend/main.js" defer></script>
   </head>
-
   <body>
       <nav>
-        <h1>Commoners Starter Kit</h1>
-        <small>Build Solidarity</small>
+        <h1>tqdm.me</h1>
+        <small>Progress on Display</small>
       </nav>
       <main>
-        <div id="console">
-          <div id="messages"></div>
-        </div>
-        <ul id="commands">
-          <li>Connect to Serial Device <button id="testSerialConnection">Run</button></li>
-          <li>Connect to Bluetooth Device <button id="testBluetoothConnection">Run</button></li>
-        </ul>
+        <div id="progress"></div>
       </main>
       <footer>
         <small>Built with ✊ by Garrett Flynn</small>

@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -60,54 +60,15 @@ footer {
 
 main {
   display: flex;
-  justify-content: center;
   gap: 20px 50px;
   padding: 25px 50px;
-  flex-wrap: wrap;
-  flex-direction: row-reverse;
+  flex-direction: column;
   overflow: auto;
 }
 
 main > * {
   flex-grow: 1;
   height: 100%;
-}
-
-#console {
-  width: min-content;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-#console::before {
-  content: 'Console';
-  font-weight: bold;
-  font-size: medium;
-  display: block;
-  padding: 10px 15px;
-  width: 100%;
-  color: white;
-  background: #0f0f0f;
-}
-
-#messages {
-  height: 100%;
-  white-space: pre;
-  font-size: 90%;
-  overflow: auto;
-}
-
-/* Don't break whitespace characters */
-#messages > div {
-  padding: 10px 20px;
-  width: 100%;
-  border-bottom: 1px solid gainsboro;
-}
-
-.row {
-  display: flex;
-  justify-content: center;
 }
 
 a {
@@ -126,9 +87,9 @@ h1 {
   margin: 0;
 }
 
-#commoners-header {
+h2 {
   font-weight: 700;
-  text-transform: uppercase;
+  margin: 0;
 }
 
 input,
@@ -143,50 +104,6 @@ button {
   background-color: #ffffff;
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#commands {
-  overflow-y: auto;
-  font-weight: bold;
-}
-
-#commands small {
-  font-size: 0.8em;
-  color: gray;
-  font-weight: 500;
-}
-
-#commands .tags {
-  font-size: 0.8em;
-}
-
-#commands li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 90%;
-  gap: 15px;
-  margin: 0;
-  padding: 10px 0px;
-}
-
-.tags {
-  display: flex;
-  gap: 5px;
-  user-select: none;
-  padding-top: 10px;
-}
-
-.tags > * {
-  padding: 0px 10px;
-  border-radius: 10px;
-  border: 1px solid gainsboro;
 }
 
 button { 
@@ -244,10 +161,112 @@ button {
   button:active {
     background-color: #0f0f0f69;
   }
-
-  #console {
-    color: black;
-    background-color: white;
-  }
-
 }
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0px 10px 0px;
+}
+
+body > header {
+  padding: 20px;
+}
+
+
+#bars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0px 20px;
+}
+
+.progress-container {
+  width: 100%;
+}
+
+.progress-container .progress-container {
+  padding: 10px;
+}
+
+.bar {
+  padding: 10px;
+}
+
+.bar, .progress {
+  width: 100%;
+}
+
+/* Small Bar */
+.bar[data-small="true"] {
+  border-bottom: 1px solid gainsboro;
+}
+
+.bar > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.bar[data-small="true"] .progress {
+  height: 10px;
+}
+
+.bar[data-small="true"] .progress:last-child {
+  border-bottom: none;
+}
+
+/* Large Bar */
+.bar[data-small="false"] {
+  border-bottom: 1px solid black;
+}
+
+.bar[data-small="false"] .progress {
+  padding: 4px;
+}
+
+.progress {
+  height: 20px;
+  background-color: #ddd;
+}
+
+.progress div {
+  height: 100%;
+  background-color: #4caf50;
+  width: 0%;
+}
+
+
+.bar-container {
+  border: 1px solid black;
+}
+
+small {
+  font-size: 0.7rem;
+  color: gray;
+  width: min-content;
+  white-space: nowrap;
+}
+
+.bar > div:last-child > small:not(:empty) {
+  font-size: 0.65rem;
+  margin-top: 5px;
+}
+
