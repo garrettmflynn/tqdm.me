@@ -1,14 +1,14 @@
 {
-  "name": "commoners-starter-kit",
+  "name": "my-tqdm",
   "version": "0.0.0",
-  "description": "A template Commoners application.",
+  "description": "View TQDM progress bars in the browser",
   "private": true,
   "type": "module",
-  "license": "MIT",
+  "license": "BSD-3-Clause",
   "author": "Garrett Flynn <garrettmflynn@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/garrettmflynn/commoners-starter-kit.git"
+    "url": "https://github.com/tqdme/tqdm.me.git"
   },
   "workspaces": [
     "src/**"
