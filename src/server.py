@@ -4,8 +4,7 @@ eventlet.monkey_patch()
 import os
 from pathlib import Path
 from flask import send_file, send_from_directory
-from tqdme.server import create
-
+from tqdme.server import Server
 
 script_directory = Path(__file__).parent.resolve()
 
@@ -13,7 +12,9 @@ if __name__ == "__main__":
     env_port = os.getenv('PORT')
     PORT = int(env_port) if env_port else 8080
     HOST = os.getenv('HOST') or 'localhost'
-    app, socketio = create(HOST, PORT, True)
+
+    server = Server(HOST, PORT)
+    app = server.app
 
     # Add application-specific routes
     @app.route('/')
@@ -29,4 +30,4 @@ if __name__ == "__main__":
     def view(path):
         return send_file(script_directory.parent / 'index.html')
     
-    socketio.run(app, host=HOST, port=PORT)
+    server.run()
