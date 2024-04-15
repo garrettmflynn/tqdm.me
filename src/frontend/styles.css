@@ -263,7 +263,7 @@ body > header {
   margin-top: 5px;
 }
 
-main small {
+small {
   font-size: 0.7rem;
   color: gray;
   width: min-content;

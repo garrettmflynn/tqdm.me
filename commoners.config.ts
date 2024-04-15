@@ -8,7 +8,8 @@ export default defineConfig({
 
     electron: {
         window: {
-            width: 1000
+            height: 800,
+            width: 1280
         }
     },
 

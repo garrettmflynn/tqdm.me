@@ -91,8 +91,9 @@ const startWSConnection = async () => {
 }
 
 if (commoners.target === 'desktop') {
-  service.onActivityDetected(startWSConnection)
-  service.onClosed(() => console.error('TQDM server was closed!'))
+  startWSConnection()
+  // service.onActivityDetected(startWSConnection)
+  // service.onClosed(() => console.error('TQDM server was closed!'))
 }
 
 else startWSConnection()
