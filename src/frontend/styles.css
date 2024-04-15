@@ -258,15 +258,15 @@ body > header {
   border: 1px solid black;
 }
 
-small {
+.bar > div:last-child > small:not(:empty) {
+  font-size: 0.65rem;
+  margin-top: 5px;
+}
+
+main small {
   font-size: 0.7rem;
   color: gray;
   width: min-content;
   white-space: nowrap;
-}
-
-.bar > div:last-child > small:not(:empty) {
-  font-size: 0.65rem;
-  margin-top: 5px;
 }
 

@@ -1,8 +1,16 @@
 const defineConfig = (o) => o 
 
 export default defineConfig({
+
+    name: 'My TQDM',
     
     icon: './icon.png', 
+
+    electron: {
+        window: {
+            width: 1000
+        }
+    },
 
     services: {
 

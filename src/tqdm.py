@@ -4,12 +4,16 @@ eventlet.monkey_patch()
 import os
 import json
 from flask import Flask, request, jsonify, send_file, send_from_directory
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
 from flask_socketio import SocketIO, join_room, leave_room
 from pathlib import Path
 
 script_directory = Path(__file__).parent.resolve()
 
+def get_url(host, port, metadata):
+    ip = metadata["ip"]
+    page_id = str(ip)
+    return f"http://{host}:{port}/view/{page_id}" 
 
 def start_server(host, port):
 
@@ -50,8 +54,9 @@ def start_server(host, port):
         group_exists = page_id in STATES
         if not group_exists:
             STATES[page_id] = {}      
-            response = dict( url = f"http://{host}:{port}/view/{page_id}" ) # Echo
-            socketio.emit('onipadded', page_id)
+            url = get_url(host, port, data)
+            response = dict( url = url ) # Echo
+            socketio.emit('onipadded', dict(id = page_id, url = url ))
 
         STATES[page_id][identifier] = data["format"]
 
@@ -71,7 +76,10 @@ def start_server(host, port):
 
     @socketio.on('discover')
     def discover():
-        socketio.emit('ips', list(STATES.keys()))
+        ips = {}
+        for ip in STATES.keys():
+            ips[ip] = get_url(host, port, dict(ip=ip))
+        socketio.emit('ips', ips)
     
 
     @socketio.on('connect')

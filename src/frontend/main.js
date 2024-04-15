@@ -38,11 +38,23 @@ const startWSConnection = async () => {
 
   const unsubscribe = (id) => socket.emit('unsubscribe', id)
 
-  const createButton = pageId => {
+  const createButton = (pageId, url) => {
     const button = document.createElement('button')
     button.innerText = labelMap[pageId] || pageId
     button.onclick = () => subscribe(pageId)
-    return button
+
+    const small = document.createElement('small')
+    const a = document.createElement('a')
+    a.href = url
+    a.innerText = 'on your browser'
+    a.target = '_blank'
+    small.append(document.createTextNode('Or open '), a, document.createTextNode('!'))
+
+
+    const div = document.createElement('div')
+    div.append(button, document.createElement('br'), small)
+
+    return div
   }
 
   socket.on('connect', () => {
@@ -69,9 +81,9 @@ const startWSConnection = async () => {
     })
   })
 
-  socket.on('ips', (data) => discoveryContainer.append(...data.map(createButton)));
+  socket.on('ips', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, url ]) => createButton(id, url))));
 
-  socket.on('onipadded', (data) => discoveryContainer.append(createButton(data)));
+  socket.on('onipadded', ({ id, url }) => discoveryContainer.append(createButton(id, url)));
 
   socket.on('disconnect', () => {
     console.log('disconnected');
