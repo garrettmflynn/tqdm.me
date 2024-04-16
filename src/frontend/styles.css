@@ -224,9 +224,22 @@ body > header {
   gap: 10px;
 }
 
+.bar label {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+
+.bar[data-complete="true"][data-live="false"] .progress {
+  background-color: gainsboro;
+}
+
+.bar[data-complete="true"][data-live="false"] .progress div {
+  background-color: silver;
+}
 
 .bar[data-small="true"] .progress {
-  height: 10px;
+  height: 5px;
 }
 
 .bar[data-small="true"] .progress:last-child {
@@ -243,7 +256,7 @@ body > header {
 }
 
 .progress {
-  height: 20px;
+  height: 10px;
   background-color: #ddd;
 }
 
@@ -254,13 +267,8 @@ body > header {
 }
 
 
-.bar-container {
-  border: 1px solid black;
-}
-
 .bar > div:last-child > small:not(:empty) {
   font-size: 0.65rem;
-  margin-top: 5px;
 }
 
 small {

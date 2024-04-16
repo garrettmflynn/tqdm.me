@@ -20,6 +20,10 @@ export const createProgressBar = (parentElement = progressContainer) => {
 
     const row1 = document.createElement('div');
     const row2 = document.createElement('div');
+    const row3 = document.createElement('div');
+
+    const headerEl = document.createElement('label');
+    row1.append(headerEl);
 
     const element = document.createElement('div');
     element.classList.add('progress');
@@ -28,35 +32,46 @@ export const createProgressBar = (parentElement = progressContainer) => {
     const readout = document.createElement('small');
     element.append(progress);
 
-    row1.append(element, readout);
+    row2.append(element, readout);
 
-    const descriptionEl = document.createElement('small');
-    row2.append(descriptionEl);
+    const metadataEl = document.createElement('small');
+    row3.append(metadataEl);
 
-    container.append(row1, row2);
+    container.append(row1, row2, row3);
 
     parentElement.appendChild(container); // Render the progress bar
 
 
-    const update = ( format_dict, metadata  = {}) => {
+    const update = ( { format, ...metadata } = {}) => {
 
-        const { total, n, elapsed, rate, prefix } = format_dict;
+        const { done, live = true } = metadata
 
+        container.setAttribute('data-complete', done); // Add a complete style to the progress bar if it is complete
+        container.setAttribute('data-live', live); // Add a live style to the progress bar if it is live
+        
+        // Catch pinged bars that did not have any updates...
+        if (!format) {
+            metadataEl.innerText = `This bar was not reached.`;
+            return
+        }
+
+        const { total, n, elapsed, rate, prefix } = format;
+        
         const percent = 100 * (n / total);
         progress.style.width = `${percent}%`
 
         readout.innerText = `${n} / ${total} (${percent.toFixed(1)}%)`;
 
-
         const remaining = rate && total ? (total - n) / rate : 0; // Seconds
 
-        descriptionEl.innerText = `${prefix ? `${prefix} — ` : ''}${elapsed.toFixed(1)}s elapsed, ${remaining.toFixed(1)}s remaining`;
+        if (prefix) headerEl.innerText = prefix
+        metadataEl.innerText = `${elapsed.toFixed(1)}s elapsed, ${remaining.toFixed(1)}s remaining`;
     }
 
 
     return {
         element,
-        description: descriptionEl,
+        description: metadataEl,
         progress,
         readout,
         container,
@@ -126,7 +141,7 @@ export function getContainer(metadata) {
             if (identifier) identifier += `/${value}`
             else identifier = value
 
-            const info = acc[value] = createContainer(identifier, `${key}: ${value}`)
+            const info = acc[value] = createContainer(identifier, value)
             parentEl.append(info.element)
         }
         

@@ -10,6 +10,10 @@ if (!window.commoners) {
   }
 }
 
+const BUTTONS = {}
+
+const ids = new Set()
+
 const pageId = window.location.pathname.split('/').slice(-1)[0]
 
 if (!pageId) mainContainer.insertAdjacentElement('afterbegin', discoveryContainer)
@@ -39,6 +43,9 @@ const startWSConnection = async () => {
   const unsubscribe = (id) => socket.emit('unsubscribe', id)
 
   const createButton = (pageId, url) => {
+
+    if (BUTTONS[pageId]) return BUTTONS[pageId]
+
     const button = document.createElement('button')
     button.innerText = labelMap[pageId] || pageId
     button.onclick = () => subscribe(pageId)
@@ -50,9 +57,10 @@ const startWSConnection = async () => {
     a.target = '_blank'
     small.append(document.createTextNode('Or open '), a, document.createTextNode('!'))
 
-
     const div = document.createElement('div')
     div.append(button, document.createElement('br'), small)
+
+    BUTTONS[pageId] = div
 
     return div
   }
@@ -69,21 +77,33 @@ const startWSConnection = async () => {
   socket.on('progress', (data) => {
     const { format, ...metadata } = data
     const { update } = getBar(metadata);
-    update(format, metadata);
+    update(data);
   })
 
   socket.on('init', ({ ip, states }) => {
-    Object.entries(states).map(([identifier, format]) => {
+    Object.entries(states).map(([ identifier, info ]) => {
       const [ppid, pid, id] = identifier.split('/')
       const metadata = { id, ppid, pid, ip }
       const { update } = getBar(metadata);
-      update(format, metadata)
+      update({ ...info, live: false })
     })
   })
 
   socket.on('ips', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, url ]) => createButton(id, url))));
 
-  socket.on('onipadded', ({ id, url }) => discoveryContainer.append(createButton(id, url)));
+  socket.on('onadded', ({ id, url }) => discoveryContainer.append(createButton(id, url)));
+  socket.on('onremoved', ({ id }) => {
+    BUTTONS[id].remove()
+    delete BUTTONS[id]
+  });
+
+  socket.on('onstart', ({ id }) => {
+    console.log('Bar added', id)
+  });
+
+  socket.on('onend', ({ id }) => {
+    console.log('Bar ended', id)
+  });
 
   socket.on('disconnect', () => {
     console.log('disconnected');
