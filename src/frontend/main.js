@@ -80,16 +80,16 @@ const startWSConnection = async () => {
     update(data);
   })
 
-  socket.on('init', ({ ip, states }) => {
+  socket.on('init', ({ user_id, states }) => {
     Object.entries(states).map(([ identifier, info ]) => {
-      const [ppid, pid, id] = identifier.split('/')
-      const metadata = { id, ppid, pid, ip }
+      const [ parent, group, id ] = identifier.split('/')
+      const metadata = { id, parent, group, user_id }
       const { update } = getBar(metadata);
       update({ ...info, live: false })
     })
   })
 
-  socket.on('ips', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, url ]) => createButton(id, url))));
+  socket.on('users', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, url ]) => createButton(id, url))));
 
   socket.on('onadded', ({ id, url }) => discoveryContainer.append(createButton(id, url)));
   socket.on('onremoved', ({ id }) => {

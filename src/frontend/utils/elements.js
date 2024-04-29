@@ -79,7 +79,7 @@ export const createProgressBar = (parentElement = progressContainer) => {
     };
 }
 
-const metadataOrder = [ 'ip', 'ppid', 'pid' ]
+const metadataOrder = [ 'user_id', 'parent', 'group' ]
 
 // Create + render a progress bar
 export function getBar ({ id, ...metadata }) {
