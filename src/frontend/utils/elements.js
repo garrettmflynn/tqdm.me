@@ -86,7 +86,8 @@ export function getBar ({ id, ...metadata }) {
 
     if (BARS[id]) return BARS[id];
 
-    const bar = createProgressBar(getContainer(metadata).bars);
+    const container = getContainer(metadata)
+    const bar = createProgressBar(container.bars);
 
     // const { container } = bar;
     // container.setAttribute('data-small', pid !== progress_bar_id); // Add a small style to the progress bar if it is not the main request bar
@@ -129,18 +130,27 @@ function createContainer( identifier, label = identifier ) {
 
 }
 
+
+// KEEP A GLOBAL REGISTRY OF ALL GROUPS DESPITE NESTING
+const CONTAINERMAP = {}
+
 export function getContainer(metadata) {
+
+    // Match parent to previous group
+    const parentContainer = CONTAINERMAP[metadata.parent]
+
+    if (parentContainer) return parentContainer
 
     let identifier;
     const container = metadataOrder.reduce((acc, key) => {
         const value = metadata[key]
         const parentEl = acc === CONTAINERS ? progressContainer : acc.element
         if (acc.subcontainers) acc = acc.subcontainers
+
+        if (identifier) identifier += `/${value}`
+        else identifier = value
+
         if (!acc[value]) {
-
-            if (identifier) identifier += `/${value}`
-            else identifier = value
-
             const info = acc[value] = createContainer(identifier, value)
             parentEl.append(info.element)
         }
@@ -148,6 +158,8 @@ export function getContainer(metadata) {
         return acc[value]
 
     }, CONTAINERS)
+
+    CONTAINERMAP[metadata.group] = container
 
     return container
 
