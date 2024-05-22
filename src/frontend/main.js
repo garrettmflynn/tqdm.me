@@ -3,9 +3,7 @@ import { getBar, labelMap, discoveryContainer, mainContainer, progressContainer 
 // When served on Python server
 if (!window.commoners) {
   window.commoners = {
-    services: {
-      tqdm: { url: 'http://localhost:3768' }
-    },
+    services: { tqdm: { url: window.location.origin } },
     target: 'web'
   }
 }
