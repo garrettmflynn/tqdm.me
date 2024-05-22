@@ -14,7 +14,7 @@
     "src/**"
   ],
   "scripts": {
-    "start": "commoners --target desktop",
+    "start": "python src/server.py",
     "dev": "commoners",
     "services": "commoners share",
     "service:node": "commoners share --service localNode",
