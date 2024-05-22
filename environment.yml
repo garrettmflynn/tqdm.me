@@ -3,8 +3,8 @@ channels:
   - defaults
 dependencies:
   - pip=23.2.1
-  - python=3.10.13
+  - python=3.12.3
   - pip:
-    - tqdme @ git+https://github.com/tqdme/tqdme.git@main#tqdme[full]
+    - tqdme=0.0.1
     - pyinstaller==6.0.0
 prefix: /opt/anaconda3/envs/tqdm.me
