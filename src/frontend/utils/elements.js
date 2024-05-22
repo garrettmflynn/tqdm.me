@@ -56,13 +56,15 @@ export const createProgressBar = (parentElement = progressContainer) => {
         }
 
         const { total, n, elapsed, rate, prefix } = format;
+
+        const cappedN = Math.min(n, total)
         
-        const percent = 100 * (n / total);
-        progress.style.width = `${percent}%`
+        const percent = 100 * ( n / total );
+        progress.style.width = `${Math.min(100, percent)}%`
 
         readout.innerText = `${n} / ${total} (${percent.toFixed(1)}%)`;
 
-        const remaining = rate && total ? (total - n) / rate : 0; // Seconds
+        const remaining = rate && total ? (total - Math.min(n, total)) / rate : 0; // Seconds
 
         if (prefix) headerEl.innerText = prefix
         metadataEl.innerText = `${elapsed.toFixed(1)}s elapsed, ${remaining.toFixed(1)}s remaining`;
