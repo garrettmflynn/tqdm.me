@@ -10,7 +10,7 @@ script_directory = Path(__file__).parent.resolve()
 
 if __name__ == "__main__":
     env_port = os.getenv('PORT')
-    PORT = int(env_port) if env_port else 8080
+    PORT = int(env_port) if env_port else 8080 # Use 8080 if run standalone (e.g. Heroku)
     HOST = os.getenv('HOST') or 'localhost'
 
     server = Server(script_directory.parent, HOST, PORT)
