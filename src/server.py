@@ -1,10 +1,9 @@
-import eventlet
-eventlet.monkey_patch()
-
 import os
 from pathlib import Path
 from flask import send_file, send_from_directory
 from tqdme.server import Server
+from gevent.pywsgi import WSGIServer
+    
 
 script_directory = Path(__file__).parent.resolve()
 
@@ -21,4 +20,5 @@ if __name__ == "__main__":
     def get_static_assets(path):
         return send_from_directory(script_directory.parent / 'src', path)
     
-    server.run()
+    http_server = WSGIServer((HOST, PORT), app)
+    http_server.serve_forever()

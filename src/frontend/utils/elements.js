@@ -2,8 +2,12 @@
 const BARS = {} // Track progress bars
 const CONTAINERS = {} // Track request containers
 
+const thisDeviceLabel = 'This Device'
+
 export const labelMap = {
-    '::1': 'This Device',
+    '::1': thisDeviceLabel,
+    'localhost': thisDeviceLabel,
+    '127.0.0.1': thisDeviceLabel
 }
   
 

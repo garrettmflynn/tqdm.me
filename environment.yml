@@ -5,6 +5,7 @@ dependencies:
   - pip=23.2.1
   - python=3.12.3
   - pip:
-    - tqdme==0.0.1
+    - gevent==24.2.1
+    - tqdme[server]==0.0.1
     - pyinstaller==6.0.0
 prefix: /opt/anaconda3/envs/tqdm.me
