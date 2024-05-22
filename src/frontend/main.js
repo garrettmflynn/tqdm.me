@@ -50,15 +50,22 @@ const startWSConnection = async () => {
     button.innerText = labelMap[pageId] || pageId
     button.onclick = () => subscribe(pageId)
 
-    const small = document.createElement('small')
-    const a = document.createElement('a')
-    a.href = url
-    a.innerText = 'on your browser'
-    a.target = '_blank'
-    small.append(document.createTextNode('Or open '), a, document.createTextNode('!'))
 
     const div = document.createElement('div')
-    div.append(button, document.createElement('br'), small)
+    div.append(button)
+
+    if (commoners.target === 'desktop') {
+
+      const small = document.createElement('small')
+      const a = document.createElement('a')
+      a.href = url
+      a.innerText = 'on your browser'
+      a.target = '_blank'
+      small.append(document.createTextNode('Or open '), a, document.createTextNode('!'))
+
+      div.append(document.createElement('br'), small)
+    }
+    
 
     BUTTONS[pageId] = div
 

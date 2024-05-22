@@ -6,6 +6,7 @@ dependencies:
   - python=3.12.3
   - pip:
     - gevent==24.2.1
+    - gevent-websocket==0.10.1
     - tqdme[server]==0.0.1
     - pyinstaller==6.0.0
 prefix: /opt/anaconda3/envs/tqdm.me
