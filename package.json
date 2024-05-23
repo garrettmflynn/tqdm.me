@@ -1,6 +1,6 @@
 {
   "name": "my-tqdm",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "View TQDM progress bars in the browser",
   "private": true,
   "type": "module",

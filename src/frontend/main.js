@@ -1,13 +1,11 @@
 import { getBar, discoveryContainer, mainContainer, clearProgress, sortContainersByTimestamp, versionReadout } from './utils/elements.js'
 
-import packageJSON from '../../package.json' assert { type: "json" }
-
 const origin = window.location.origin
 
 // When served on Python server
 if (!window.commoners) {
   window.commoners = {
-    version: packageJSON.version,
+    version: '0.0.3', // NOTE: Must keep up-to-date manually
     services: { tqdm: { url: origin } },
     target: 'web'
   }
