@@ -33,7 +33,4 @@ After committing your changes, push to Heroku.
 git push heroku main
 ```
 
-If you'd like to push a different branch, specify it.
-```
-git push heroku branch-name:main
-```
+Otherwise merge into the `production` branch to automatically deploy to Heroku.
