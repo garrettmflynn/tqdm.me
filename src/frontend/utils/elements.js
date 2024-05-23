@@ -4,6 +4,7 @@ const BARS = {} // Track progress bars
 const CONTAINERS = {} // Track request containers
 const CONTAINERMAP = {} // KEEP A GLOBAL REGISTRY OF ALL GROUPS DESPITE NESTING
 
+export const versionReadout = document.getElementById('version');
 export const mainContainer = document.querySelector('main');
 export const progressContainer = document.getElementById('progress')
 export const discoveryContainer = document.createElement('div');
