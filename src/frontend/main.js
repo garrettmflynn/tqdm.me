@@ -1,9 +1,11 @@
 import { getBar, labelMap, discoveryContainer, mainContainer, progressContainer } from './utils/elements.js'
 
+const origin = window.location.origin
+
 // When served on Python server
 if (!window.commoners) {
   window.commoners = {
-    services: { tqdm: { url: window.location.origin } },
+    services: { tqdm: { url:origin } },
     target: 'web'
   }
 }
@@ -40,7 +42,7 @@ const startWSConnection = async () => {
 
   const unsubscribe = (id) => socket.emit('unsubscribe', id)
 
-  const createButton = (pageId, url) => {
+  const createButton = ( pageId, pathname ) => {
 
     if (BUTTONS[pageId]) return BUTTONS[pageId]
 
@@ -56,7 +58,7 @@ const startWSConnection = async () => {
 
       const small = document.createElement('small')
       const a = document.createElement('a')
-      a.href = url
+      a.href = new URL(pathname, origin).href
       a.innerText = 'on your browser'
       a.target = '_blank'
       small.append(document.createTextNode('Or open '), a, document.createTextNode('!'))
@@ -94,9 +96,10 @@ const startWSConnection = async () => {
     })
   })
 
-  socket.on('users', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, url ]) => createButton(id, url))));
+  socket.on('users', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, pathname ]) => createButton(id, pathname))));
 
-  socket.on('onadded', ({ id, url }) => discoveryContainer.append(createButton(id, url)));
+  socket.on('onadded', ({ id, pathname }) => discoveryContainer.append(createButton(id, pathname)));
+
   socket.on('onremoved', ({ id }) => {
     BUTTONS[id].remove()
     delete BUTTONS[id]
