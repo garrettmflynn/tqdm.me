@@ -1,4 +1,4 @@
-import { convertUTCToLocalTime } from "./time";
+import { convertUTCToLocalTime } from "./time.js";
 
 const BARS = {} // Track progress bars
 const CONTAINERS = {} // Track request containers
