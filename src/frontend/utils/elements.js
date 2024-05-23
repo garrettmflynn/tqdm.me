@@ -1,15 +1,8 @@
+import { convertUTCToLocalTime } from "./time";
 
 const BARS = {} // Track progress bars
 const CONTAINERS = {} // Track request containers
-
-const thisDeviceLabel = 'This Device'
-
-export const labelMap = {
-    '::1': thisDeviceLabel,
-    'localhost': thisDeviceLabel,
-    '127.0.0.1': thisDeviceLabel
-}
-  
+const CONTAINERMAP = {} // KEEP A GLOBAL REGISTRY OF ALL GROUPS DESPITE NESTING
 
 export const mainContainer = document.querySelector('main');
 export const progressContainer = document.getElementById('progress')
@@ -87,6 +80,20 @@ export const createProgressBar = (parentElement = progressContainer) => {
 
 const metadataOrder = [ 'user_id', 'parent', 'group' ]
 
+export const sortContainersByTimestamp = () => {
+    const containers = Object.values(CONTAINERMAP)
+
+    // Sort datetime strings
+    containers.sort((a, b) => {
+        const aDate = new Date(a.element.getAttribute('data-timestamp'))
+        const bDate = new Date(b.element.getAttribute('data-timestamp'))
+        return bDate - aDate
+    })
+
+    // Reorder in existing containers
+    containers.forEach((container) => container.element.parentElement.append(container.element))
+}
+
 // Create + render a progress bar
 export function getBar ({ id, ...metadata }) {
 
@@ -94,6 +101,11 @@ export function getBar ({ id, ...metadata }) {
 
     const container = getContainer(metadata)
     const bar = createProgressBar(container.bars);
+
+    // Add latest timestamp to the container
+    const timestamp = metadata.timestamp
+    container.element.setAttribute('data-timestamp', timestamp) // For Sorting
+    container.description.innerText = convertUTCToLocalTime(timestamp, "America/Los_Angeles") // For visualization
 
     // const { container } = bar;
     // container.setAttribute('data-small', pid !== progress_bar_id); // Add a small style to the progress bar if it is not the main request bar
@@ -103,8 +115,6 @@ export function getBar ({ id, ...metadata }) {
 }
 
 function createContainer( identifier, label = identifier ) {
-
-    label = labelMap[identifier] || label // Override label with ID default
 
     const container = document.createElement('div');
     container.id = identifier;
@@ -136,10 +146,6 @@ function createContainer( identifier, label = identifier ) {
 
 }
 
-
-// KEEP A GLOBAL REGISTRY OF ALL GROUPS DESPITE NESTING
-const CONTAINERMAP = {}
-
 export function getContainer(metadata) {
 
     // Match parent to previous group
@@ -159,6 +165,11 @@ export function getContainer(metadata) {
         if (!acc[value]) {
             const info = acc[value] = createContainer(identifier, value)
             parentEl.append(info.element)
+        } 
+        
+        else {
+            const el = acc[value].element
+            if (el.parentElement !== parentEl) parentEl.append(el) // Ensure container exists on parent
         }
         
         return acc[value]
@@ -170,4 +181,38 @@ export function getContainer(metadata) {
     return container
 
 
+}
+
+
+
+// ----------------------------
+// CLEAR PROGRESS
+// ----------------------------
+
+export const clearProgress = () => {
+    clearBars()
+    clearContainers()
+}
+
+export const clearContainers = () => {
+    const containerObjects = [ CONTAINERMAP, CONTAINERS ]
+    containerObjects.forEach((parent) => Object.keys(parent).forEach((id) => removeContainer(id, parent)))
+}
+
+export const clearBars = () => Object.keys(BARS).forEach(removeBar)
+
+export function removeContainer (id, parent = CONTAINERS) {
+    const container = parent[id]
+    if (container) {
+        container.element.remove()
+        delete parent[id]
+    }
+}
+
+export function removeBar (id) {
+    const bar = BARS[id]
+    if (bar) {
+        bar.container.remove()
+        delete BARS[id]
+    }
 }

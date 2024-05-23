@@ -1,4 +1,4 @@
-import { getBar, labelMap, discoveryContainer, mainContainer, progressContainer } from './utils/elements.js'
+import { getBar, discoveryContainer, mainContainer, clearProgress, sortContainersByTimestamp } from './utils/elements.js'
 
 const origin = window.location.origin
 
@@ -12,11 +12,9 @@ if (!window.commoners) {
 
 const BUTTONS = {}
 
-const ids = new Set()
+const userId = window.location.pathname.split('/').slice(-1)[0]
 
-const pageId = window.location.pathname.split('/').slice(-1)[0]
-
-if (!pageId) mainContainer.insertAdjacentElement('afterbegin', discoveryContainer)
+if (!userId) mainContainer.insertAdjacentElement('afterbegin', discoveryContainer)
 
 const service = commoners.services.tqdm
 const tqdmUrl = new URL(service.url)
@@ -30,26 +28,26 @@ const startWSConnection = async () => {
   const socket = io(href);
 
   const subscribe = (id) => {
-    if (subscribed !== id) {
-      if (subscribed) {
-        unsubscribe(subscribed) // Unsubscribe from the previous page
-        progressContainer.innerHTML = '' // Clear the progress container
-      }
-      socket.emit('subscribe', id)
-      subscribed = id
+    if (subscribed === id) return
+    if (subscribed) {
+      unsubscribe(subscribed) // Unsubscribe from the previous page
+      clearProgress() // Clear the progress bars and containers
     }
+    socket.emit('subscribe', id)
+    subscribed = id
   }
 
   const unsubscribe = (id) => socket.emit('unsubscribe', id)
 
-  const createButton = ( pageId, pathname ) => {
+  const createButton = ( userId, pathname ) => {
 
-    if (BUTTONS[pageId]) return BUTTONS[pageId]
+    if (BUTTONS[userId]) return BUTTONS[userId]
 
     const button = document.createElement('button')
-    button.innerText = labelMap[pageId] || pageId
-    button.onclick = () => subscribe(pageId)
+    button.innerText = userId
 
+    // Subscribe to a specific user ID (only one at a time)
+    button.onclick = () => subscribe(userId)
 
     const div = document.createElement('div')
     div.append(button)
@@ -67,18 +65,14 @@ const startWSConnection = async () => {
     }
     
 
-    BUTTONS[pageId] = div
+    BUTTONS[userId] = div
 
     return div
   }
 
   socket.on('connect', () => {
-
-    if (pageId) {
-      socket.emit('subscribe', pageId) // NOTE: Complete this to start updates
-    } else {
-      socket.emit('discover')
-    }
+    if (userId) socket.emit('subscribe', userId) // NOTE: Complete this to start updates
+    else socket.emit('discover')
   });
 
   socket.on('progress', (data) => {
@@ -90,10 +84,14 @@ const startWSConnection = async () => {
   socket.on('init', ({ user_id, states }) => {
     Object.entries(states).map(([ identifier, info ]) => {
       const [ parent, group, id ] = identifier.split('/')
-      const metadata = { id, parent, group, user_id }
+      const { timestamp } = info
+      const metadata = { id, parent, group, user_id, timestamp }
       const { update } = getBar(metadata);
       update({ ...info, live: false })
     })
+
+    sortContainersByTimestamp()
+
   })
 
   socket.on('users', (data) => discoveryContainer.append(...Object.entries(data).map(([ id, pathname ]) => createButton(id, pathname))));
@@ -106,6 +104,7 @@ const startWSConnection = async () => {
   });
 
   socket.on('onstart', ({ id }) => {
+    sortContainersByTimestamp()
     console.log('Bar added', id)
   });
 
@@ -121,7 +120,7 @@ const startWSConnection = async () => {
 if (commoners.target === 'desktop') {
   startWSConnection()
   // service.onActivityDetected(startWSConnection)
-  // service.onClosed(() => console.error('TQDM server was closed!'))
+  service.onClosed(() => console.error('TQDME Server was closed!'))
 }
 
 else startWSConnection()
