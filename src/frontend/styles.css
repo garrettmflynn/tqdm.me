@@ -67,8 +67,12 @@ main {
 }
 
 main > * {
-  flex-grow: 1;
-  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  height: fit-content;
+  /* flex-grow: 1;
+  height: 100%; */
 }
 
 a {
