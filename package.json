@@ -8,7 +8,7 @@
   "author": "Garrett Flynn <garrettmflynn@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tqdme/tqdm.me.git"
+    "url": "https://github.com/neuralinterfaces/tqdm.me.git"
   },
   "workspaces": [
     "src/**"

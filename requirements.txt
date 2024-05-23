@@ -26,7 +26,7 @@ requests==2.32.2
 setuptools==69.5.1
 simple-websocket==1.0.0
 tqdm==4.66.4
-tqdme @ git+https://github.com/tqdme/tqdme.git@f7c0e3a3944900794f1f30f39f3d728952a621fb
+tqdme @ git+https://github.com/neuralinterfaces/tqdme.git@f72d4eebad61b560fa532ba8b45a7fa63fb84198
 urllib3==2.2.1
 Werkzeug==3.0.3
 wheel==0.43.0

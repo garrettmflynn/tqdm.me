@@ -7,6 +7,6 @@ dependencies:
   - pip:
     - eventlet==0.36.1
     - gunicorn==22.0.0
-    - tqdme @ git+https://github.com/tqdme/tqdme.git@main#tqdme[server]
+    - tqdme @ git+https://github.com/neuralinterfaces/tqdme.git@main#tqdme[server]
     - pyinstaller==6.0.0
 prefix: /opt/anaconda3/envs/tqdm.me

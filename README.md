@@ -24,6 +24,7 @@ heroku buildpacks:add heroku/python
 ### Update
 Ensure your `requirements.txt` file is up-to-date.
 ```
+conda env update --file environment.yml --prune
 pip freeze > requirements.txt
 ```
 
